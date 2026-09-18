@@ -3,13 +3,13 @@ from pathlib import Path
 import pytest
 from pypdf import PdfWriter
 
-from utilities.csvUtilities import CsvUtilities
-from utilities.excelUtilities import ExcelUtilities
-from utilities.fileUtilities import FileUtilities
-from utilities.jsonUtilities import JsonUtilities
-from utilities.pdfUtilities import PdfUtilities
-from utilities.pythonUtilities import PythonUtilities
-from utilities.yamlUtilities import YamlUtilities
+from automation.utilities.csvUtilities import CsvUtilities
+from automation.utilities.excelUtilities import ExcelUtilities
+from automation.utilities.fileUtilities import FileUtilities
+from automation.utilities.jsonUtilities import JsonUtilities
+from automation.utilities.pdfUtilities import PdfUtilities
+from automation.utilities.pythonUtilities import PythonUtilities
+from automation.utilities.yamlUtilities import YamlUtilities
 
 
 def test_json_yaml_csv_and_file_utilities(tmp_path: Path):

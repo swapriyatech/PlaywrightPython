@@ -38,7 +38,7 @@ def application_registry():
 
 @pytest.fixture(scope="session")
 def data_repository():
-    return TestDataRepository(ROOT / "testData")
+    return TestDataRepository(ROOT / "automation" / "testData")
 
 
 @pytest.fixture(scope="session")

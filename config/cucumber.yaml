@@ -1,5 +1,5 @@
 feature_paths:
-  - features
+  - automation/features
 step_paths:
-  - step_definitions
+  - automation/step_definitions
 tags: ""

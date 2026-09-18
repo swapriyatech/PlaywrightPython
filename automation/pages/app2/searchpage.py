@@ -1,8 +1,8 @@
 from playwright.sync_api import Page
 
+from automation.locators.app2.GoogleSearchPageLocators import GoogleSearchPageLocators
+from automation.pages.commonPage.CommonPage import CommonPage
 from core.actions.base_actions import BaseActions
-from locators.app2.GoogleSearchPageLocators import GoogleSearchPageLocators
-from pages.commonPage.CommonPage import CommonPage
 
 
 class SearchPage(CommonPage):

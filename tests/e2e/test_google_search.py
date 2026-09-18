@@ -4,10 +4,10 @@ import pytest
 from pytest_bdd import scenarios
 
 pytest_plugins = [
-    "step_definitions.common.BrowserStepDef",
-    "step_definitions.common.ApplicationStepDef",
-    "step_definitions.common.data_steps",
-    "step_definitions.app2.SearchPageStepDef",
+    "automation.step_definitions.common.BrowserStepDef",
+    "automation.step_definitions.common.ApplicationStepDef",
+    "automation.step_definitions.common.data_steps",
+    "automation.step_definitions.app2.SearchPageStepDef",
 ]
 
 pytestmark = [
@@ -19,8 +19,8 @@ pytestmark = [
 ]
 
 scenarios(
-    "../../features/app2/smoke/google_search.feature",
-    "../../features/app2/sanity/google_search.feature",
-    "../../features/app2/regression/google_search.feature",
-    "../../features/app2/e2e/google_search.feature",
+    "../../automation/features/app2/smoke/google_search.feature",
+    "../../automation/features/app2/sanity/google_search.feature",
+    "../../automation/features/app2/regression/google_search.feature",
+    "../../automation/features/app2/e2e/google_search.feature",
 )

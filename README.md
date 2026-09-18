@@ -39,20 +39,20 @@ bandit -r src
 
 The browser scenarios are opt-in through `RUN_BROWSER_TESTS=true`; framework tests do not require network access.
 
-Features are organized per application under `features/<application>/smoke`,
+Features are organized per application under `automation/features/<application>/smoke`,
 `sanity`, `regression`, and `e2e`.
 
-Locators are page-specific under `locators/<application>/<PageName>Locators.py`.
+Locators are page-specific under `automation/locators/<application>/<PageName>Locators.py`.
 Each application also has one shared file: `App1CommonLocators.py` or
 `App2CommonLocators.py` for selectors reused across that application's pages.
 Legacy application locator modules re-export these classes for compatibility.
-Step definitions follow the same ownership model: `step_definitions/common/`
+Step definitions follow the same ownership model: `automation/step_definitions/common/`
 contains browser, application, and data setup steps, while
 `HomePageStepDef.py` and `SearchPageStepDef.py` contain page-specific steps.
-Test data is organized under `testData/`; see [testData/README.md](testData/README.md)
+Test data is organized under `automation/testData/`; see [testData/README.md](automation/testData/README.md)
 for the merge order and suite layout.
 
-Reusable helpers are under `utilities/`: Excel, JSON, PDF, CSV, YAML, file,
+Reusable helpers are under `automation/utilities/`: Excel, JSON, PDF, CSV, YAML, file,
 date-time, Python, and Playwright utilities. They contain framework-safe
 operations only; application behavior belongs in business and page layers.
 

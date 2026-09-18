@@ -1,7 +1,7 @@
 # Test data
 
 ```text
-testData/
+automation/testData/
 ├── common/commonData.json
 ├── app1/
 │   ├── appCommon.json

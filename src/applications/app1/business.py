@@ -1,5 +1,5 @@
+from automation.pages.app1.homepage import HomePage
 from core.world.scenario_context import ScenarioContext
-from pages.app1.homepage import HomePage
 
 
 class CricbuzzNavigationBusiness:

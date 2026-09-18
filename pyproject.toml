@@ -32,7 +32,7 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
-testpaths = ["tests", "features"]
+testpaths = ["tests", "automation/features"]
 pythonpath = ["src"]
 addopts = "-ra --strict-markers"
 markers = [

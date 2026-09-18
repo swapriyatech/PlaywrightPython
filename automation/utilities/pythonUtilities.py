@@ -3,7 +3,8 @@ from __future__ import annotations
 import os
 import secrets
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
+from pathlib import Path
 from typing import TypeVar
 
 T = TypeVar("T")
@@ -57,3 +58,51 @@ class PythonUtilities:
                     time.sleep(delay_seconds)
         assert last_error is not None
         raise last_error
+
+    @staticmethod
+    def is_blank(value: object) -> bool:
+        return value is None or (isinstance(value, str) and not value.strip())
+
+    @staticmethod
+    def clamp(value: int | float, minimum: int | float, maximum: int | float) -> int | float:
+        if minimum > maximum:
+            raise ValueError("minimum cannot be greater than maximum")
+        return max(minimum, min(value, maximum))
+
+    @staticmethod
+    def chunks(values: Iterable[T], size: int) -> list[list[T]]:
+        if size < 1:
+            raise ValueError("size must be at least 1")
+        result: list[list[T]] = []
+        chunk: list[T] = []
+        for value in values:
+            chunk.append(value)
+            if len(chunk) == size:
+                result.append(chunk)
+                chunk = []
+        if chunk:
+            result.append(chunk)
+        return result
+
+    @staticmethod
+    def deep_merge(*objects: dict[str, object]) -> dict[str, object]:
+        result: dict[str, object] = {}
+        for source in objects:
+            for key, value in source.items():
+                if isinstance(result.get(key), dict) and isinstance(value, dict):
+                    result[key] = PythonUtilities.deep_merge(result[key], value)  # type: ignore[arg-type]
+                else:
+                    result[key] = value
+        return result
+
+    @staticmethod
+    def safe_filename(value: str, replacement: str = "_") -> str:
+        invalid = '<>:"/\\|?*'
+        return "".join(
+            replacement if character in invalid else character for character in value
+        ).strip()
+
+    @staticmethod
+    def absolute_path(value: str | Path, base: Path | None = None) -> Path:
+        path = Path(value)
+        return path if path.is_absolute() else (base or Path.cwd()) / path

@@ -1,5 +1,5 @@
+from automation.pages.app2.searchpage import SearchPage
 from core.world.scenario_context import ScenarioContext
-from pages.app2.searchpage import SearchPage
 
 
 class GoogleSearchBusiness:

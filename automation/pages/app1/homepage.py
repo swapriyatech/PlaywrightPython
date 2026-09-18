@@ -1,8 +1,8 @@
 from playwright.sync_api import Page
 
+from automation.locators.app1.CricbuzzHomePageLocators import CricbuzzHomePageLocators
+from automation.pages.commonPage.CommonPage import CommonPage
 from core.actions.base_actions import BaseActions
-from locators.app1.CricbuzzHomePageLocators import CricbuzzHomePageLocators
-from pages.commonPage.CommonPage import CommonPage
 
 
 class HomePage(CommonPage):
