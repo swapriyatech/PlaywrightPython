@@ -1,5 +1,5 @@
-from applications.app1.pages import CricbuzzHomePage
 from core.world.scenario_context import ScenarioContext
+from pages.app1.HomePage import HomePage
 
 
 class CricbuzzNavigationBusiness:
@@ -7,7 +7,7 @@ class CricbuzzNavigationBusiness:
         if context.page is None:
             raise RuntimeError("Scenario page is not available")
         self._context = context
-        self._page = CricbuzzHomePage(context.page, context.actions())
+        self._page = HomePage(context.page, context.actions())
 
     def open_home(self) -> str:
         base_url = self._context.manifest.base_urls[self._context.config.environment]
