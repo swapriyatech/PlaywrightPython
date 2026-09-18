@@ -46,6 +46,9 @@ Locators are page-specific under `locators/<application>/<PageName>Locators.py`.
 Each application also has one shared file: `App1CommonLocators.py` or
 `App2CommonLocators.py` for selectors reused across that application's pages.
 Legacy application locator modules re-export these classes for compatibility.
+Step definitions follow the same ownership model: `step_definitions/common/`
+contains browser, application, and data setup steps, while
+`HomePageStepDef.py` and `SearchPageStepDef.py` contain page-specific steps.
 Test data is organized under `testData/`; see [testData/README.md](testData/README.md)
 for the merge order and suite layout.
 

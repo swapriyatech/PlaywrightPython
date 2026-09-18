@@ -1,7 +1,8 @@
 @app2 @smoke @TC001
 Feature: Google search
   Scenario: Search for Playwright documentation
-    Given I open the app2 application
+    Given I launch the browser
+    And I open the app2 application
     And I load common data
     And I load all application common data
     And I load common data for app2 application

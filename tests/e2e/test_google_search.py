@@ -3,7 +3,12 @@ import os
 import pytest
 from pytest_bdd import scenarios
 
-pytest_plugins = ["step_definitions.common.data_steps", "step_definitions.app2.search_steps"]
+pytest_plugins = [
+    "step_definitions.common.BrowserStepDef",
+    "step_definitions.common.ApplicationStepDef",
+    "step_definitions.common.data_steps",
+    "step_definitions.app2.SearchPageStepDef",
+]
 
 pytestmark = [
     pytest.mark.app2,
