@@ -1,3 +1,0 @@
-from locators.app2.GoogleSearchPageLocators import GoogleSearchPageLocators
-
-GoogleSearchLocators = GoogleSearchPageLocators

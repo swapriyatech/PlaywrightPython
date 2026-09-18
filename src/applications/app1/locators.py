@@ -1,3 +1,0 @@
-from locators.app1.CricbuzzHomePageLocators import CricbuzzHomePageLocators
-
-CricbuzzHomeLocators = CricbuzzHomePageLocators

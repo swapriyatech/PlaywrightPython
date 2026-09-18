@@ -20,24 +20,27 @@ on:
         required: true
         default: regression
         type: choice
-        options: [smoke, sanity, regression]
+        options: [smoke, sanity, regression, e2e]
       browser:
         description: Playwright browser
         required: true
         default: chromium
         type: choice
         options: [chromium, firefox, webkit]
+      workers:
+        description: Pytest worker count
+        required: true
+        default: '1'
+        type: string
   push:
     branches: [main]
-  schedule:
-    - cron: '0 1 * * *'
 
 jobs:
   framework:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        browser: [chromium, firefox, webkit]
+        browser: [chromium]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -46,7 +49,7 @@ jobs:
           cache: pip
       - run: pip install -r requirements.lock
       - run: pip install --no-deps -e .
-      - run: playwright install --with-deps ${{ matrix.browser }}
+      - run: playwright install --with-deps ${{ inputs.browser || matrix.browser }}
       - name: Framework tests
         run: python -m pytest tests/unit tests/architecture --cov=src --cov-report=term-missing --junitxml=reports/junit.xml --html=reports/report.html --self-contained-html --alluredir=reports/allure
       - name: Browser tests
@@ -54,9 +57,10 @@ jobs:
           APP: ${{ inputs.application || 'app1' }}
           ENVIRONMENT: ${{ inputs.environment || 'UAT' }}
           SUITE: ${{ inputs.suite || 'smoke' }}
-          BROWSER: ${{ matrix.browser }}
+          BROWSER: ${{ inputs.browser || matrix.browser }}
+          WORKERS: ${{ inputs.workers || '1' }}
           RUN_BROWSER_TESTS: 'true'
-        run: python -m pytest tests/e2e -m "${{ inputs.application || 'app1' }} and ${{ inputs.suite || 'smoke' }}" --junitxml=reports/e2e-${{ matrix.browser }}.xml --html=reports/e2e-${{ matrix.browser }}.html --self-contained-html --alluredir=reports/allure
+        run: python -m pytest tests/e2e -n "${{ inputs.workers || '1' }}" -m "${{ inputs.application || 'app1' }} and ${{ inputs.suite || 'smoke' }}" --junitxml=reports/e2e-${{ inputs.browser || matrix.browser }}.xml --html=reports/e2e-${{ inputs.browser || matrix.browser }}.html --self-contained-html --alluredir=reports/allure
       - run: ruff check .
       - run: pip-audit -r requirements.lock --format cyclonedx-json --output reports/sbom.json
       - run: bandit -r src

@@ -61,6 +61,11 @@ Add only an application directory with a manifest, pages, business services, fea
 Workflow inputs or environment variables override `config/framework.yaml`:
 `APP`, `ENVIRONMENT`, `BROWSER`, `SUITE`, `WORKERS`, and `RETRY_COUNT`.
 
+The manual GitHub Actions pipeline exposes application, environment, suite,
+browser, and worker selections. Scheduled UTC cron mappings are: sanity 02:00
+(09:00 PM EST), smoke 04:00 (11:00 PM EST), regression 06:00 (01:00 AM EST),
+and weekly e2e Sunday 08:00 (03:00 AM EST).
+
 ## Readiness
 
 The framework is **95% ready with Docker excluded**. Core code, application discovery, configuration, browser smoke tests, offline tests, security audit, reporting adapters, and CI/CD configuration are validated. Deployment still requires real secrets/targets, production SMTP, the first hosted CI run, and target-infrastructure scale benchmarks. See [docs/PRODUCTION_READINESS.md](docs/PRODUCTION_READINESS.md).

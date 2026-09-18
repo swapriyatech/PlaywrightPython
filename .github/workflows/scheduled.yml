@@ -2,9 +2,10 @@ name: scheduled-suites
 
 on:
   schedule:
-    - cron: '0 1 * * *'
-    - cron: '0 3 * * *'
-    - cron: '0 17 * * *'
+    - cron: '0 2 * * *'
+    - cron: '0 4 * * *'
+    - cron: '0 6 * * *'
+    - cron: '0 8 * * 0'
   workflow_dispatch:
 
 jobs:
@@ -12,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        suite: [smoke, sanity, regression]
+        application: [app1, app2]
         browser: [chromium, firefox, webkit]
     steps:
       - uses: actions/checkout@v4
@@ -25,15 +26,15 @@ jobs:
       - run: playwright install --with-deps ${{ matrix.browser }}
       - name: Run scheduled suite
         env:
-          APP: app1
+          APP: ${{ matrix.application }}
           ENVIRONMENT: UAT
-          SUITE: ${{ matrix.suite }}
+          SUITE: ${{ github.event.schedule == '0 2 * * *' && 'sanity' || github.event.schedule == '0 4 * * *' && 'smoke' || github.event.schedule == '0 6 * * *' && 'regression' || 'e2e' }}
           BROWSER: ${{ matrix.browser }}
           RUN_BROWSER_TESTS: 'true'
-        run: python -m pytest tests/e2e -m "app1 and ${{ matrix.suite }}" --junitxml=reports/${{ matrix.suite }}-${{ matrix.browser }}.xml --html=reports/${{ matrix.suite }}-${{ matrix.browser }}.html --self-contained-html --alluredir=reports/allure
+        run: python -m pytest tests/e2e -m "${{ matrix.application }} and ${{ github.event.schedule == '0 2 * * *' && 'sanity' || github.event.schedule == '0 4 * * *' && 'smoke' || github.event.schedule == '0 6 * * *' && 'regression' || 'e2e' }}" --junitxml=reports/${{ matrix.application }}-${{ matrix.browser }}.xml --html=reports/${{ matrix.application }}-${{ matrix.browser }}.html --self-contained-html --alluredir=reports/allure
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: scheduled-${{ matrix.suite }}-${{ matrix.browser }}
+          name: scheduled-${{ matrix.application }}-${{ matrix.browser }}
           path: reports/
           retention-days: 30
