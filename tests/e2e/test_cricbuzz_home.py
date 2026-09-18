@@ -13,4 +13,9 @@ pytestmark = [
     ),
 ]
 
-scenarios("../../features/app1/smoke/cricbuzz_home.feature")
+scenarios(
+    "../../features/app1/smoke/cricbuzz_home.feature",
+    "../../features/app1/sanity/cricbuzz_home.feature",
+    "../../features/app1/regression/cricbuzz_home.feature",
+    "../../features/app1/e2e/cricbuzz_home.feature",
+)

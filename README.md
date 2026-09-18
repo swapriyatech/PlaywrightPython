@@ -25,6 +25,9 @@ Copy `.env.example` to `.env` and provide environment-specific URLs or credentia
 ```powershell
 pytest                         # default suite
 pytest -m smoke                # smoke suite
+pytest tests/e2e -m "app1 and sanity"       # application sanity suite
+pytest tests/e2e -m "app2 and regression"   # application regression suite
+pytest tests/e2e -m "app1 and e2e"           # end-to-end suite
 pytest tests/unit tests/architecture
 python -m compileall -q src tests
 ruff check .
@@ -35,6 +38,9 @@ bandit -r src
 ```
 
 The browser scenarios are opt-in through `RUN_BROWSER_TESTS=true`; framework tests do not require network access.
+
+Features are organized per application under `features/<application>/smoke`,
+`sanity`, `regression`, and `e2e`.
 
 ## Adding an application
 

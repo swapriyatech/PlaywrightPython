@@ -13,4 +13,9 @@ pytestmark = [
     ),
 ]
 
-scenarios("../../features/app2/smoke/google_search.feature")
+scenarios(
+    "../../features/app2/smoke/google_search.feature",
+    "../../features/app2/sanity/google_search.feature",
+    "../../features/app2/regression/google_search.feature",
+    "../../features/app2/e2e/google_search.feature",
+)

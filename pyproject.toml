@@ -40,6 +40,7 @@ markers = [
   "smoke: smoke suite",
   "sanity: sanity suite",
   "regression: regression suite",
+  "e2e: end-to-end suite",
 ]
 
 [tool.ruff]
