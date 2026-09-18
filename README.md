@@ -42,6 +42,10 @@ The browser scenarios are opt-in through `RUN_BROWSER_TESTS=true`; framework tes
 Features are organized per application under `features/<application>/smoke`,
 `sanity`, `regression`, and `e2e`.
 
+Locators are application-owned under `src/applications/<application>/locators.py`.
+Test data is organized under `testData/`; see [testData/README.md](testData/README.md)
+for the merge order and suite layout.
+
 ## Adding an application
 
 Add only an application directory with a manifest, pages, business services, features, steps, and test data. Set `APP=app3`; no `src/core` edit is required. Application names are validated against discovered manifests.
