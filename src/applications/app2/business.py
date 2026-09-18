@@ -13,3 +13,7 @@ class GoogleSearchBusiness:
         base_url = self._context.manifest.base_urls[self._context.config.environment]
         self._page.search(base_url, query)
         return self._page.has_results()
+
+    def open_application(self) -> None:
+        base_url = self._context.manifest.base_urls[self._context.config.environment]
+        self._page.open(base_url)

@@ -1,5 +1,5 @@
 import pytest
-from pytest_bdd import given, parsers, then
+from pytest_bdd import given, parsers, then, when
 
 from applications.app2.business import GoogleSearchBusiness
 
@@ -9,7 +9,12 @@ def google_business(scenario_context):
     return GoogleSearchBusiness(scenario_context)
 
 
-@given(parsers.parse('I search Google for "{query}"'))
+@given("I open the app2 application")
+def open_app2(google_business: GoogleSearchBusiness) -> None:
+    google_business.open_application()
+
+
+@when(parsers.parse('I search Google for "{query}"'))
 def search_google(google_business: GoogleSearchBusiness, query: str) -> None:
     google_business.search(query)
 

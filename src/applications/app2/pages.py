@@ -11,9 +11,12 @@ class GoogleSearchPage:
         self.locators = GoogleSearchPageLocators(page)
 
     def search(self, base_url: str, query: str) -> None:
-        self._page.goto(base_url, wait_until="domcontentloaded")
+        self.open(base_url)
         self._actions.fill(self.locators.search_box, query)
         self._actions.press(self.locators.search_box, "Enter")
+
+    def open(self, base_url: str) -> None:
+        self._page.goto(base_url, wait_until="domcontentloaded")
 
     def has_results(self) -> bool:
         return "/search" in self._page.url and "/sorry" not in self._page.url

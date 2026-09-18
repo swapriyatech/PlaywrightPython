@@ -1,5 +1,7 @@
-@app1 @regression
+@app1 @regression @TC001
 Feature: Cricbuzz regression
   Scenario: Open Cricbuzz home page in regression suite
-    When I open the Cricbuzz home page
+    Given I open the app1 application
+    And I load common data
+    And I load app1 test case data "TC001"
     Then the Cricbuzz page has a title

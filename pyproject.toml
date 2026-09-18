@@ -41,6 +41,7 @@ markers = [
   "sanity: sanity suite",
   "regression: regression suite",
   "e2e: end-to-end suite",
+  "TC001: test case identifier",
 ]
 
 [tool.ruff]

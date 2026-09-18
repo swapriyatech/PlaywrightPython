@@ -1,5 +1,5 @@
 import pytest
-from pytest_bdd import then, when
+from pytest_bdd import given, then, when
 
 from applications.app1.business import CricbuzzNavigationBusiness
 
@@ -7,6 +7,11 @@ from applications.app1.business import CricbuzzNavigationBusiness
 @pytest.fixture
 def cricbuzz_business(scenario_context):
     return CricbuzzNavigationBusiness(scenario_context)
+
+
+@given("I open the app1 application")
+def open_app1(cricbuzz_business: CricbuzzNavigationBusiness) -> None:
+    cricbuzz_business.open_home()
 
 
 @when("I open the Cricbuzz home page")

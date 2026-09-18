@@ -5,6 +5,7 @@ import pytest
 from playwright.sync_api import sync_playwright
 
 from core.configuration.models import load_runtime_config
+from core.data.repository import TestDataRepository
 from core.registry.application_registry import ApplicationRegistry
 from core.reporting.evidence import EvidenceCapture
 from core.world.scenario_context import ScenarioContext
@@ -33,6 +34,21 @@ def framework_config():
 @pytest.fixture(scope="session")
 def application_registry():
     return ApplicationRegistry(ROOT / "src" / "applications")
+
+
+@pytest.fixture
+def test_data(request):
+    application = next((name for name in ("app1", "app2") if name in request.node.keywords), "app1")
+    suite = next(
+        (
+            name
+            for name in ("smoke", "sanity", "regression", "e2e")
+            if name in request.node.keywords
+        ),
+        "smoke",
+    )
+    test_case = next((name for name in request.node.keywords if name.startswith("TC")), "TC001")
+    return TestDataRepository(ROOT / "testData").load_case(application, suite, test_case)
 
 
 @pytest.fixture
