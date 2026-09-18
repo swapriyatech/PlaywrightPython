@@ -7,7 +7,9 @@ SUITES = ("smoke", "sanity", "regression", "e2e")
 
 def test_locators_are_grouped_by_application_and_page():
     locator_root = ROOT / "locators"
+    assert (locator_root / "app1" / "App1CommonLocators.py").is_file()
     assert (locator_root / "app1" / "CricbuzzHomePageLocators.py").is_file()
+    assert (locator_root / "app2" / "App2CommonLocators.py").is_file()
     assert (locator_root / "app2" / "GoogleSearchPageLocators.py").is_file()
 
 
