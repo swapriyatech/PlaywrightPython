@@ -16,6 +16,9 @@ def search_google(google_business: GoogleSearchBusiness, query: str) -> None:
 
 @then("Google returns search results")
 def google_results(scenario_context) -> None:
-    assert scenario_context.page is not None
-    assert "/search" in scenario_context.page.url
-    assert "/sorry" not in scenario_context.page.url
+    if scenario_context.page is None:
+        raise AssertionError("Scenario page was not created")
+    if "/search" not in scenario_context.page.url:
+        raise AssertionError(f"Google search URL was not reached: {scenario_context.page.url}")
+    if "/sorry" in scenario_context.page.url:
+        raise AssertionError("Google returned an anti-bot challenge page")

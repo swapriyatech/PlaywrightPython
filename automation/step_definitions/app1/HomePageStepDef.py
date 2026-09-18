@@ -11,5 +11,7 @@ def cricbuzz_business(scenario_context):
 
 @then("the Cricbuzz page has a title")
 def cricbuzz_title(scenario_context) -> None:
-    assert scenario_context.page is not None
-    assert scenario_context.page.title()
+    if scenario_context.page is None:
+        raise AssertionError("Scenario page was not created")
+    if not scenario_context.page.title():
+        raise AssertionError("Cricbuzz page title is empty")

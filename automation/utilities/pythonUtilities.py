@@ -56,7 +56,8 @@ class PythonUtilities:
                 last_error = error
                 if attempt < attempts - 1:
                     time.sleep(delay_seconds)
-        assert last_error is not None
+        if last_error is None:
+            raise RuntimeError("Retry operation ended without an error")
         raise last_error
 
     @staticmethod
