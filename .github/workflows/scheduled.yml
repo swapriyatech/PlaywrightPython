@@ -35,7 +35,7 @@ on:
 
 jobs:
   suite:
-    if: github.event_name == 'schedule' || (matrix.application == inputs.application && matrix.browser == inputs.browser)
+    if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && matrix.application == inputs.application && matrix.browser == inputs.browser) }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -54,11 +54,23 @@ jobs:
         env:
           APP: ${{ inputs.application || matrix.application }}
           ENVIRONMENT: ${{ inputs.environment || 'UAT' }}
-          SUITE: ${{ inputs.suite || (github.event.schedule == '0 2 * * *' && 'sanity' || github.event.schedule == '0 4 * * *' && 'smoke' || github.event.schedule == '0 6 * * *' && 'regression' || 'e2e') }}
+          SELECTED_SUITE: ${{ inputs.suite || '' }}
+          SCHEDULE: ${{ github.event.schedule || '' }}
           BROWSER: ${{ inputs.browser || matrix.browser }}
           WORKERS: '6'
           RUN_BROWSER_TESTS: 'true'
-        run: python -m pytest tests/e2e -n 6 -m "${{ inputs.application || matrix.application }} and ${{ inputs.suite || (github.event.schedule == '0 2 * * *' && 'sanity' || github.event.schedule == '0 4 * * *' && 'smoke' || github.event.schedule == '0 6 * * *' && 'regression' || 'e2e') }}" --junitxml=reports/${{ inputs.application || matrix.application }}-${{ inputs.browser || matrix.browser }}.xml --html=reports/${{ inputs.application || matrix.application }}-${{ inputs.browser || matrix.browser }}.html --self-contained-html --alluredir=reports/allure
+        run: |
+          suite="$SELECTED_SUITE"
+          if [ -z "$suite" ]; then
+            case "$SCHEDULE" in
+              '0 2 * * *') suite='sanity' ;;
+              '0 4 * * *') suite='smoke' ;;
+              '0 6 * * *') suite='regression' ;;
+              '0 8 * * 0') suite='e2e' ;;
+              *) echo "Unsupported schedule: $SCHEDULE"; exit 1 ;;
+            esac
+          fi
+          pytest -n 6 -m "$APP and $suite" --junitxml="reports/$APP-$BROWSER.xml" --html="reports/$APP-$BROWSER.html" --self-contained-html --alluredir=reports/allure
       - uses: actions/upload-artifact@v4
         if: always()
         with:
