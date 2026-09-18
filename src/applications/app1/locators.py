@@ -1,10 +1,3 @@
-from playwright.sync_api import Locator, Page
+from locators.app1.CricbuzzHomePageLocators import CricbuzzHomePageLocators
 
-
-class CricbuzzHomeLocators:
-    def __init__(self, page: Page) -> None:
-        self.page = page
-
-    @property
-    def headline(self) -> Locator:
-        return self.page.locator("h1").first
+CricbuzzHomeLocators = CricbuzzHomePageLocators

@@ -42,7 +42,8 @@ The browser scenarios are opt-in through `RUN_BROWSER_TESTS=true`; framework tes
 Features are organized per application under `features/<application>/smoke`,
 `sanity`, `regression`, and `e2e`.
 
-Locators are application-owned under `src/applications/<application>/locators.py`.
+Locators are page-specific under `locators/<application>/<PageName>Locators.py`.
+Legacy application locator modules re-export these classes for compatibility.
 Test data is organized under `testData/`; see [testData/README.md](testData/README.md)
 for the merge order and suite layout.
 

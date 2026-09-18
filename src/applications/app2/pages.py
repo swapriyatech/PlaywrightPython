@@ -1,14 +1,14 @@
 from playwright.sync_api import Page
 
-from applications.app2.locators import GoogleSearchLocators
 from core.actions.base_actions import BaseActions
+from locators.app2.GoogleSearchPageLocators import GoogleSearchPageLocators
 
 
 class GoogleSearchPage:
     def __init__(self, page: Page, actions: BaseActions) -> None:
         self._page = page
         self._actions = actions
-        self.locators = GoogleSearchLocators(page)
+        self.locators = GoogleSearchPageLocators(page)
 
     def search(self, base_url: str, query: str) -> None:
         self._page.goto(base_url, wait_until="domcontentloaded")
