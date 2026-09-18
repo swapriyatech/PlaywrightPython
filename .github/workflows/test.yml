@@ -31,7 +31,13 @@ on:
         description: Pytest worker count
         required: true
         default: '1'
-        type: string
+        type: choice
+        options: ['1', '2', '4', '6', '10']
+      parallel:
+        description: Enable parallel test execution
+        required: true
+        default: true
+        type: boolean
   push:
     branches: [main]
 
@@ -60,7 +66,12 @@ jobs:
           BROWSER: ${{ inputs.browser || matrix.browser }}
           WORKERS: ${{ inputs.workers || '1' }}
           RUN_BROWSER_TESTS: 'true'
-        run: python -m pytest tests/e2e -n "${{ inputs.workers || '1' }}" -m "${{ inputs.application || 'app1' }} and ${{ inputs.suite || 'smoke' }}" --junitxml=reports/e2e-${{ inputs.browser || matrix.browser }}.xml --html=reports/e2e-${{ inputs.browser || matrix.browser }}.html --self-contained-html --alluredir=reports/allure
+        run: |
+          if [ "${{ inputs.parallel || 'true' }}" = "true" ]; then
+            python -m pytest tests/e2e -n "${{ inputs.workers || '1' }}" -m "${{ inputs.application || 'app1' }} and ${{ inputs.suite || 'smoke' }}" --junitxml=reports/e2e-${{ inputs.browser || matrix.browser }}.xml --html=reports/e2e-${{ inputs.browser || matrix.browser }}.html --self-contained-html --alluredir=reports/allure
+          else
+            python -m pytest tests/e2e -m "${{ inputs.application || 'app1' }} and ${{ inputs.suite || 'smoke' }}" --junitxml=reports/e2e-${{ inputs.browser || matrix.browser }}.xml --html=reports/e2e-${{ inputs.browser || matrix.browser }}.html --self-contained-html --alluredir=reports/allure
+          fi
       - run: ruff check .
       - run: pip-audit -r requirements.lock --format cyclonedx-json --output reports/sbom.json
       - run: bandit -r src

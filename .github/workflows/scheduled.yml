@@ -7,9 +7,35 @@ on:
     - cron: '0 6 * * *'
     - cron: '0 8 * * 0'
   workflow_dispatch:
+    inputs:
+      application:
+        description: Application to run manually
+        required: true
+        default: app1
+        type: choice
+        options: [app1, app2]
+      environment:
+        description: Environment to run manually
+        required: true
+        default: UAT
+        type: choice
+        options: [QA, UAT]
+      suite:
+        description: Suite to run manually
+        required: true
+        default: sanity
+        type: choice
+        options: [smoke, sanity, regression, e2e]
+      browser:
+        description: Browser to run manually
+        required: true
+        default: chromium
+        type: choice
+        options: [chromium, firefox, webkit]
 
 jobs:
   suite:
+    if: github.event_name == 'schedule' || (matrix.application == inputs.application && matrix.browser == inputs.browser)
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -26,12 +52,13 @@ jobs:
       - run: playwright install --with-deps ${{ matrix.browser }}
       - name: Run scheduled suite
         env:
-          APP: ${{ matrix.application }}
-          ENVIRONMENT: UAT
-          SUITE: ${{ github.event.schedule == '0 2 * * *' && 'sanity' || github.event.schedule == '0 4 * * *' && 'smoke' || github.event.schedule == '0 6 * * *' && 'regression' || 'e2e' }}
-          BROWSER: ${{ matrix.browser }}
+          APP: ${{ inputs.application || matrix.application }}
+          ENVIRONMENT: ${{ inputs.environment || 'UAT' }}
+          SUITE: ${{ inputs.suite || (github.event.schedule == '0 2 * * *' && 'sanity' || github.event.schedule == '0 4 * * *' && 'smoke' || github.event.schedule == '0 6 * * *' && 'regression' || 'e2e') }}
+          BROWSER: ${{ inputs.browser || matrix.browser }}
+          WORKERS: '6'
           RUN_BROWSER_TESTS: 'true'
-        run: python -m pytest tests/e2e -m "${{ matrix.application }} and ${{ github.event.schedule == '0 2 * * *' && 'sanity' || github.event.schedule == '0 4 * * *' && 'smoke' || github.event.schedule == '0 6 * * *' && 'regression' || 'e2e' }}" --junitxml=reports/${{ matrix.application }}-${{ matrix.browser }}.xml --html=reports/${{ matrix.application }}-${{ matrix.browser }}.html --self-contained-html --alluredir=reports/allure
+        run: python -m pytest tests/e2e -n 6 -m "${{ inputs.application || matrix.application }} and ${{ inputs.suite || (github.event.schedule == '0 2 * * *' && 'sanity' || github.event.schedule == '0 4 * * *' && 'smoke' || github.event.schedule == '0 6 * * *' && 'regression' || 'e2e') }}" --junitxml=reports/${{ inputs.application || matrix.application }}-${{ inputs.browser || matrix.browser }}.xml --html=reports/${{ inputs.application || matrix.application }}-${{ inputs.browser || matrix.browser }}.html --self-contained-html --alluredir=reports/allure
       - uses: actions/upload-artifact@v4
         if: always()
         with:
