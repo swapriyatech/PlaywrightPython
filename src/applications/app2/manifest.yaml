@@ -1,0 +1,7 @@
+name: app2
+display_name: Google
+base_urls:
+  QA: https://www.google.com
+  UAT: https://www.google.com
+page_module: applications.app2.pages
+business_module: applications.app2.business

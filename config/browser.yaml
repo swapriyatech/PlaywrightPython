@@ -1,0 +1,9 @@
+browser: chromium
+headless: true
+slow_motion: 0
+viewport:
+  width: 1440
+  height: 900
+locale: en-US
+timezone_id: UTC
+accept_downloads: true

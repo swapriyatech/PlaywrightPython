@@ -1,0 +1,5 @@
+feature_paths:
+  - features
+step_paths:
+  - step_definitions
+tags: ""

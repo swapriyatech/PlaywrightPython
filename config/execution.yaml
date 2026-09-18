@@ -1,0 +1,9 @@
+parallel: false
+workers: 1
+retry_count: 0
+retryable_failures:
+  - TimeoutFailure
+  - NetworkFailure
+  - BrowserCrash
+  - InfrastructureFailure
+mode: local

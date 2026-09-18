@@ -1,0 +1,9 @@
+allure_dir: reports/allure
+html_dir: reports/html
+screenshot: on_failure
+video: retain_on_failure
+trace: on_failure
+artifact_retention_days: 30
+email:
+  enabled: false
+  recipients: []

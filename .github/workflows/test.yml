@@ -1,0 +1,51 @@
+name: test
+
+on:
+  workflow_dispatch:
+    inputs:
+      application:
+        description: Application manifest name
+        required: true
+        default: app1
+      environment:
+        description: Target environment
+        required: true
+        default: UAT
+      suite:
+        description: Suite marker
+        required: true
+        default: regression
+      browser:
+        description: Playwright browser
+        required: true
+        default: chromium
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 1 * * *'
+
+jobs:
+  framework:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.lock
+      - run: pip install --no-deps -e .
+      - run: playwright install --with-deps ${{ matrix.browser }}
+      - run: python -m pytest tests/unit tests/architecture --cov=src --cov-report=term-missing
+      - run: ruff check .
+      - run: pip-audit
+      - run: bandit -r src
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reports-${{ matrix.browser }}
+          path: reports/
+          retention-days: 30

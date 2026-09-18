@@ -1,0 +1,7 @@
+name: app1
+display_name: Cricbuzz
+base_urls:
+  QA: https://www.cricbuzz.com
+  UAT: https://www.cricbuzz.com
+page_module: applications.app1.pages
+business_module: applications.app1.business

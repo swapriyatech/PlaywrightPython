@@ -1,0 +1,15 @@
+application: app1
+environment: UAT
+browser: chromium
+suite: regression
+execution:
+  parallel: false
+  workers: 1
+retry:
+  count: 0
+timeouts:
+  action: 10000
+  expect: 10000
+  page_load: 30000
+  navigation: 30000
+  test: 120000
