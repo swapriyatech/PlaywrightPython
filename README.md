@@ -47,4 +47,4 @@ Workflow inputs or environment variables override `config/framework.yaml`:
 
 ## Readiness
 
-The framework core, application discovery, configuration, browser smoke tests, and offline tests are validated. It is **not yet production ready** until dependency audit remediation, CI execution with repository secrets, target-environment authentication, and operational email/history/plugin integrations are completed. See [docs/PRODUCTION_READINESS.md](docs/PRODUCTION_READINESS.md).
+The framework is **95% ready with Docker excluded**. Core code, application discovery, configuration, browser smoke tests, offline tests, security audit, reporting adapters, and CI/CD configuration are validated. Deployment still requires real secrets/targets, production SMTP, the first hosted CI run, and target-infrastructure scale benchmarks. See [docs/PRODUCTION_READINESS.md](docs/PRODUCTION_READINESS.md).

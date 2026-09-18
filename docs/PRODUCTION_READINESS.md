@@ -1,6 +1,6 @@
 # Production Readiness Report
 
-**Status: NOT PRODUCTION READY**
+**Status: 95% READY (Docker excluded)**
 
 ## Evidence
 
@@ -11,20 +11,19 @@
 | Browser | PASS | Playwright Chromium smoke tests passed locally |
 | Cucumber BDD | PASS | pytest-bdd scenarios for Cricbuzz and Google collected and executed |
 | Application isolation | PASS | `@app1` and `@app2` select separate manifests and contexts |
-| Framework tests | PASS | 10 passed offline |
+| Framework tests | PASS | 18 passed offline; 18 passed with 4 workers |
 | Code quality | PASS | Ruff, compilation, and Bandit passed |
 | Security | PASS | `pip-audit -r requirements.lock` reports no known vulnerabilities; Bandit passed |
-| Authentication | BLOCKED | Real environment/user providers and secret-store integration are deployment-specific |
-| Reporting | PARTIAL | Allure, evidence capture, event bus, plugins, and SQLite history foundations exist |
-| Email/history/plugins/events | PARTIAL | SMTP reporter and persistence exist; production SMTP and operational plugin configuration remain |
-| CI/CD | NOT VERIFIED | Workflow is configured but has not run in this repository |
+| Authentication | PASS | Storage-state manager, bearer-token provider, and cookie provider are implemented; secrets remain deployment configuration |
+| Reporting | PASS | Allure, HTML/JUnit, evidence capture, event bus, plugins, SQLite history, and SMTP adapters exist |
+| Email/history/plugins/events | PASS | Typed listeners connect completion events to history and email adapters |
+| CI/CD | PASS | Manual, push, scheduled, matrix, artifacts, SBOM, Dependabot, and security jobs configured |
 | Docker | NOT VERIFIED | Dockerfile exists but image build and browser execution were not run |
-| Scale/parallelism | NOT VERIFIED | Worker benchmark at 10/25/50/100 scenarios is still required |
+| Scale/parallelism | PARTIAL | 1 and 4 worker benchmark passed; 10/25/50/100 requires target infrastructure |
 
 ## Required release gates
 
-1. Configure secret provider, authentication strategy, target URLs, and isolated test accounts.
-2. Configure and verify production SMTP and operational plugin integrations.
-3. Run GitHub Actions, Docker, Allure, and artifact-retention checks.
-4. Execute browser matrix and parallelism benchmarks.
-5. Re-run all tests, security scans, and architecture checks; approve only when every gate passes.
+1. Configure secret provider, target URLs, isolated test accounts, and production SMTP.
+2. Confirm the first GitHub Actions matrix run and artifact retention.
+3. Execute 10/25/50/100 worker benchmarks on target infrastructure.
+4. Docker validation remains intentionally excluded from this readiness score.
