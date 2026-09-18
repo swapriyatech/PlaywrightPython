@@ -69,6 +69,8 @@ The manual GitHub Actions pipeline exposes application, environment, suite,
 browser, and worker selections. Scheduled UTC cron mappings are: sanity 02:00
 (09:00 PM EST), smoke 04:00 (11:00 PM EST), regression 06:00 (01:00 AM EST),
 and weekly e2e Sunday 08:00 (03:00 AM EST).
+Open **Actions**, select **Manual Test Execution**, and click **Run workflow**
+to use the manual selections.
 
 ## Readiness
 
