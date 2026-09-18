@@ -18,6 +18,7 @@ def test_top_level_test_artifacts_have_application_boundaries():
     assert (ROOT / "step_definitions").is_dir()
     assert (ROOT / "testData").is_dir()
     assert (ROOT / "features").is_dir()
+    assert (ROOT / "step_definitions" / "common" / "data_steps.py").is_file()
     for application in APPLICATIONS:
         assert (ROOT / "locators" / application).is_dir()
         assert (ROOT / "step_definitions" / application).is_dir()
