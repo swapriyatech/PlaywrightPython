@@ -36,8 +36,23 @@ def application_registry():
     return ApplicationRegistry(ROOT / "src" / "applications")
 
 
+@pytest.fixture(scope="session")
+def data_repository():
+    return TestDataRepository(ROOT / "testData")
+
+
+@pytest.fixture(scope="session")
+def common_data(data_repository):
+    return data_repository.load_common_data()
+
+
+@pytest.fixture(scope="session")
+def all_application_common_data(data_repository):
+    return data_repository.load_all_application_common_data()
+
+
 @pytest.fixture
-def test_data(request):
+def data_context(request, data_repository):
     application = next((name for name in ("app1", "app2") if name in request.node.keywords), "app1")
     suite = next(
         (
@@ -48,7 +63,28 @@ def test_data(request):
         "smoke",
     )
     test_case = next((name for name in request.node.keywords if name.startswith("TC")), "TC001")
-    return TestDataRepository(ROOT / "testData").load_case(application, suite, test_case)
+    return application, suite, test_case, data_repository
+
+
+@pytest.fixture
+def application_common_data(data_context):
+    application, _, _, data_repository = data_context
+    return data_repository.load_application_common(application)
+
+
+@pytest.fixture
+def test_case_data(data_context):
+    application, suite, test_case, data_repository = data_context
+    return data_repository.merge(
+        data_repository.load_suite_data(application, suite),
+        data_repository.load_test_case_data(application, suite, test_case),
+    )
+
+
+@pytest.fixture
+def test_data(data_context):
+    application, suite, test_case, data_repository = data_context
+    return data_repository.load_case(application, suite, test_case)
 
 
 @pytest.fixture

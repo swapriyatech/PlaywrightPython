@@ -17,5 +17,5 @@ testData/
     └── e2e/suiteData.json
 ```
 
-`TestDataRepository.load_case()` merges data in this order:
-common, application common, suite, test-case, runtime override. Secrets and credentials must come from environment variables or a secret provider.
+The feature setup loads data in this order:
+common data, all application common data (cached once), selected application common data (cached), suite data, test-case data (cached), runtime override. Secrets and credentials must come from environment variables or a secret provider.
