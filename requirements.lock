@@ -175,6 +175,8 @@ pygments==2.21.0
     #   rich
 pyparsing==3.3.2
     # via pip-requirements-parser
+pypdf==6.19.0
+    # via enterprise-playwright-python (pyproject.toml)
 pytest==9.1.1
     # via
     #   allure-pytest

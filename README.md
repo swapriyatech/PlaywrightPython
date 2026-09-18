@@ -52,6 +52,10 @@ contains browser, application, and data setup steps, while
 Test data is organized under `testData/`; see [testData/README.md](testData/README.md)
 for the merge order and suite layout.
 
+Reusable helpers are under `utilities/`: Excel, JSON, PDF, CSV, YAML, file,
+date-time, Python, and Playwright utilities. They contain framework-safe
+operations only; application behavior belongs in business and page layers.
+
 ## Adding an application
 
 Add only an application directory with a manifest, pages, business services, features, steps, and test data. Set `APP=app3`; no `src/core` edit is required. Application names are validated against discovered manifests.
