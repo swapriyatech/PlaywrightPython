@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 import pytest
@@ -5,9 +6,23 @@ from playwright.sync_api import sync_playwright
 
 from core.configuration.models import load_runtime_config
 from core.registry.application_registry import ApplicationRegistry
+from core.reporting.evidence import EvidenceCapture
 from core.world.scenario_context import ScenarioContext
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    report = outcome.get_result()
+    if report.when != "call" or not report.failed:
+        return
+    context = item.funcargs.get("scenario_context")
+    if context is None or context.page is None:
+        return
+    scenario_id = re.sub(r"[^a-zA-Z0-9_.-]", "_", item.nodeid)
+    EvidenceCapture(ROOT / "reports" / "artifacts").capture_failure(context.page, scenario_id)
 
 
 @pytest.fixture(scope="session")

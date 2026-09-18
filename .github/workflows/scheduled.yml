@@ -1,0 +1,39 @@
+name: scheduled-suites
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+    - cron: '0 3 * * *'
+    - cron: '0 17 * * *'
+  workflow_dispatch:
+
+jobs:
+  suite:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        suite: [smoke, sanity, regression]
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.lock
+      - run: pip install --no-deps -e .
+      - run: playwright install --with-deps ${{ matrix.browser }}
+      - name: Run scheduled suite
+        env:
+          APP: app1
+          ENVIRONMENT: UAT
+          SUITE: ${{ matrix.suite }}
+          BROWSER: ${{ matrix.browser }}
+          RUN_BROWSER_TESTS: 'true'
+        run: python -m pytest tests/e2e -m "app1 and ${{ matrix.suite }}" --junitxml=reports/${{ matrix.suite }}-${{ matrix.browser }}.xml --html=reports/${{ matrix.suite }}-${{ matrix.browser }}.html --self-contained-html --alluredir=reports/allure
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: scheduled-${{ matrix.suite }}-${{ matrix.browser }}
+          path: reports/
+          retention-days: 30

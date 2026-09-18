@@ -7,18 +7,26 @@ on:
         description: Application manifest name
         required: true
         default: app1
+        type: choice
+        options: [app1, app2]
       environment:
         description: Target environment
         required: true
         default: UAT
+        type: choice
+        options: [QA, UAT]
       suite:
         description: Suite marker
         required: true
         default: regression
+        type: choice
+        options: [smoke, sanity, regression]
       browser:
         description: Playwright browser
         required: true
         default: chromium
+        type: choice
+        options: [chromium, firefox, webkit]
   push:
     branches: [main]
   schedule:
@@ -39,9 +47,18 @@ jobs:
       - run: pip install -r requirements.lock
       - run: pip install --no-deps -e .
       - run: playwright install --with-deps ${{ matrix.browser }}
-      - run: python -m pytest tests/unit tests/architecture --cov=src --cov-report=term-missing
+      - name: Framework tests
+        run: python -m pytest tests/unit tests/architecture --cov=src --cov-report=term-missing --junitxml=reports/junit.xml --html=reports/report.html --self-contained-html --alluredir=reports/allure
+      - name: Browser tests
+        env:
+          APP: ${{ inputs.application || 'app1' }}
+          ENVIRONMENT: ${{ inputs.environment || 'UAT' }}
+          SUITE: ${{ inputs.suite || 'smoke' }}
+          BROWSER: ${{ matrix.browser }}
+          RUN_BROWSER_TESTS: 'true'
+        run: python -m pytest tests/e2e -m "${{ inputs.application || 'app1' }} and ${{ inputs.suite || 'smoke' }}" --junitxml=reports/e2e-${{ matrix.browser }}.xml --html=reports/e2e-${{ matrix.browser }}.html --self-contained-html --alluredir=reports/allure
       - run: ruff check .
-      - run: pip-audit
+      - run: pip-audit -r requirements.lock --format cyclonedx-json --output reports/sbom.json
       - run: bandit -r src
       - uses: actions/upload-artifact@v4
         if: always()
@@ -49,14 +66,3 @@ jobs:
           name: reports-${{ matrix.browser }}
           path: reports/
           retention-days: 30
-
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: docker/setup-buildx-action@v3
-      - uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: false
-          tags: enterprise-playwright-python:ci
